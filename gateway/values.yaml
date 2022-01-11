@@ -2,7 +2,6 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-
 tags:
   traefik: true
 
@@ -13,9 +12,9 @@ traefik:
     - "--serverstransport.insecureskipverify=true"
     - "--serverstransport.rootcas=/run/secrets/tmaxcloud/ca.crt, /run/secrets/kubernetes.io/serviceaccount/ca.crt"
     - "--entrypoints.websecure.http.middlewares=cors-header@file"
-  deployment:
-    imagePullSecrets:
-      - name: regcred
+  # deployment:
+  #   imagePullSecrets:
+  #     - name: regcred
   volumes:
     - name: gateway-config
       mountPath: "/gateway-config"
@@ -31,10 +30,10 @@ tls:
     dns:
       type: route53
       accessKeyID: AKIA5D7L5Q3IXJWC5OFK
-      accessKeySecret: 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
+      accessKeySecret: wIBzZ2jdfdfdfO2xiGAS1Ulwfdfdfsadfsdf
     domains:
       - sunnycloud.link
-#      - tmaxcloud.org
+    #      - tmaxcloud.org
     environment: production
   selfsigned:
     createTLS: false
