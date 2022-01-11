@@ -5,9 +5,9 @@ kind: TLSStore
 metadata:
   name: default
   annotations:
-    "helm.sh/hook": post-install,post-upgrade,post-delete
+    "helm.sh/hook": post-install,post-upgrade
     "helm.sh/hook-weight": "20"
-    "helm.sh/hook-delete-policy": before-hook-creation
+{{/*    "helm.sh/hook-delete-policy": before-hook-creation*/}}
 spec:
   defaultCertificate:
     secretName: {{ .Values.tls.acme.dns.type }}-acme-crt-secret
@@ -20,7 +20,7 @@ kind: TLSStore
 metadata:
   name: default
   annotations:
-    "helm.sh/hook": post-install,post-upgrade,post-delete
+    "helm.sh/hook": post-install,post-upgrade
     "helm.sh/hook-weight": "20"
     "helm.sh/hook-delete-policy": before-hook-creation
 spec:
