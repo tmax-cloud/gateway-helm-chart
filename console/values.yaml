@@ -5,14 +5,22 @@
 nameOverride: "console"
 fullnameOverride: "console"
 
-replicaCount: 1
-
 console:
   auth:
     hyperauth: hyperauth.org
     realm: tmax
     clientid: hypercloud5
   mcMode: false
+
+ingressroute:
+  enabled: true
+  domain:
+    enabled: false
+    name: tmaxcloud.org
+  ip:
+    enabled: true
+
+replicaCount: 1
 
 image:
   repository: docker.io/tmaxcloudck/hypercloud-console
@@ -37,14 +45,6 @@ securityContext:
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
   # runAsUser: 1000
-
-ingressroute:
-  enabled: true
-  domain:
-    enabled: false
-    name: tmaxcloud.org
-  ip:
-    enabled: true
 
 service:
   type: ClusterIP

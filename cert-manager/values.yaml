@@ -14,6 +14,8 @@ cert-manager:
 
 global:
   createCA: true
-  sleepyTime: 100
-# imagePullSecrets:
-#   - name: regcred
+  sleepyTime: 120
+# kubectl create ns cert-manager
+# kubectl create secret docker-registry regcred --docker-username=tmaxcloudck --docker-password=$PASSWD -n cert-manager
+imagePullSecrets:
+  - name: regcred

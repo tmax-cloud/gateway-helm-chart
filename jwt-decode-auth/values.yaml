@@ -10,8 +10,6 @@ hyperauth:
 middleware:
   enabled: true
 
-replicaCount: 1
-
 image:
   repository: docker.io/tmaxcloudck/jwt-decode
   pullPolicy: IfNotPresent
@@ -21,8 +19,7 @@ image:
 imagePullSecrets:
   - name: regcred
 
-nameOverride: ""
-fullnameOverride: "jwt-decode-auth"
+replicaCount: 1
 
 serviceAccount:
   # Specifies whether a service account should be created

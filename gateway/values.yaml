@@ -6,15 +6,15 @@ tags:
   traefik: true
 
 traefik:
-  fullnameOverride: "traefik"
+  fullnameOverride: "gateway"
   additionalArguments:
     # Only use dev environment
     - "--serverstransport.insecureskipverify=true"
     - "--serverstransport.rootcas=/run/secrets/tmaxcloud/ca.crt, /run/secrets/kubernetes.io/serviceaccount/ca.crt"
     - "--entrypoints.websecure.http.middlewares=cors-header@file"
-  # deployment:
-  #   imagePullSecrets:
-  #     - name: regcred
+  deployment:
+    imagePullSecrets:
+      - name: regcred
   volumes:
     - name: gateway-config
       mountPath: "/gateway-config"
@@ -32,8 +32,8 @@ tls:
       accessKeyID: AKIA5D7L5Q3I7VQCJ65K
       accessKeySecret: 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
     domains:
-      - sunnycloud.link
-    #      - tmaxcloud.org
+#      - sunnycloud.link
+      - tmaxcloud.org
     environment: staging
   selfsigned:
     createTLS: false
