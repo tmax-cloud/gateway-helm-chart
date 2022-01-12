@@ -22,7 +22,7 @@ spec:
   routes:
   - match: PathPrefix(`/dashboard`) || PathPrefix(`/api`) || PathPrefix(`/`)
     kind: Rule
-    middleware:
+    middlewares:
     - name: dashboard-auth@file
     services:
     - name: api@internal
