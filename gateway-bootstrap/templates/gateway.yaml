@@ -33,8 +33,6 @@ metadata:
     app.kubernetes.io/instance: "gateway-sync-wave"
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
     helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
   annotations:
     argocd.argoproj.io/sync-wave: "0"
 spec:

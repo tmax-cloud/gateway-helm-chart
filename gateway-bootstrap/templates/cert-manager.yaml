@@ -34,8 +34,6 @@ metadata:
     app.kubernetes.io/instance: "cert-manager-sync-wave"
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
     helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
   annotations:
     argocd.argoproj.io/sync-wave: "-1"
 spec:
