@@ -25,10 +25,10 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "{{ .Release.Name }}"
+  name: "jwt-decode-auth-sync-wave"
   labels:
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
-    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/instance: "jwt-decode-auth-sync-wave"
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
     helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
   finalizers:
@@ -42,7 +42,7 @@ spec:
       name: "{{ .Release.Name }}"
       labels:
         app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
-        app.kubernetes.io/instance: {{ .Release.Name | quote }}
+        app.kubernetes.io/instance: "jwt-decode-auth-sync-wave"
         helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     spec:
       imagePullSecrets:

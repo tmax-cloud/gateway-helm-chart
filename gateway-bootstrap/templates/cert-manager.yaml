@@ -28,10 +28,10 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "{{ .Release.Name }}"
+  name: "cert-manager-sync-wave"
   labels:
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
-    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/instance: "cert-manager-sync-wave"
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
     helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
   finalizers:
@@ -45,7 +45,7 @@ spec:
       name: "{{ .Release.Name }}"
       labels:
         app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
-        app.kubernetes.io/instance: {{ .Release.Name | quote }}
+        app.kubernetes.io/instance: "cert-manager-sync-wave"
         helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     spec:
       imagePullSecrets:
