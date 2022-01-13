@@ -10,11 +10,11 @@ metadata:
 spec:
   destination:
     namespace: api-gateway-system
-    server: 'https://kubernetes.default.svc'
+    server: {{ .Values.spec.destination.server }}
   source:
-    path: manifest/api-gateway/gateway
-    repoURL: 'https://github.com/tmax-cloud/argocd-installer.git'
-    targetRevision: HEAD
+    path: cert-manager
+    repoURL: {{ .Values.spec.source.repoURL }}
+    targetRevision: {{ .Values.spec.source.targetRevision }}
   project: default
   syncPolicy:
     syncOptions:
