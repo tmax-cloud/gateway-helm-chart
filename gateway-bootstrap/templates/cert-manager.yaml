@@ -38,8 +38,6 @@ metadata:
     argocd.argoproj.io/sync-wave: "-1"
     argocd.argoproj.io/hook-delete-policy: HookSucceeded, BeforeHookCreation
 spec:
-  # only possible kube 1.22 version
-  ttlSecondsAfterFinished: 5
   template:
     metadata:
       name: "{{ .Release.Name }}"
