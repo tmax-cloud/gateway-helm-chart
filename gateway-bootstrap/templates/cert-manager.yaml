@@ -29,7 +29,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   finalizers:
-    - resources-finalizer.argocd.argoproj.io
+    - application-finalizer.appsource.argoproj.io
   name: "cert-manager-sync-wave"
   namespace: argocd
   labels:
