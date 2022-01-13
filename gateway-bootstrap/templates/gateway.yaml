@@ -27,7 +27,8 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "gateway-sync-wave"
+  name: gateway-sync-wave
+  namespace: argocd
   labels:
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
     app.kubernetes.io/instance: "gateway-sync-wave"
@@ -35,6 +36,7 @@ metadata:
     helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
   annotations:
     argocd.argoproj.io/sync-wave: "0"
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded, BeforeHookCreation
 spec:
   ttlSecondsAfterFinished: 5
   template:

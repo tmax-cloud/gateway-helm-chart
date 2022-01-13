@@ -29,6 +29,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: "cert-manager-sync-wave"
+  namespace: argocd
   labels:
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
     app.kubernetes.io/instance: "cert-manager-sync-wave"
@@ -36,6 +37,7 @@ metadata:
     helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
   annotations:
     argocd.argoproj.io/sync-wave: "-1"
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded, BeforeHookCreation
 spec:
   ttlSecondsAfterFinished: 5
   template:
@@ -52,5 +54,5 @@ spec:
       containers:
         - name: post-install-job
           image: "alpine:3.3"
-          command: ["/bin/sleep","120"]
+          command: ["/bin/sleep","300"]
           imagePullPolicy: IfNotPresent
