@@ -1,4 +1,4 @@
-{{- if .Values.global.createCA }}
+{{- if .Values.tmax.createCA }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -24,7 +24,7 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name | quote }}
         helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     spec:
-      {{- with .Values.global.imagePullSecrets }}
+      {{- with .Values.tmax.imagePullSecrets }}
       imagePullSecrets:
       {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -32,6 +32,10 @@ spec:
       containers:
         - name: post-install-job
           image: "alpine:3.3"
-          command: ["/bin/sleep","{{ default "20" .Values.global.sleepyTime }}"]
+          command: ["/bin/sleep","{{ default "20" .Values.tmax.sleepyTime }}"]
           imagePullPolicy: IfNotPresent
+          {{- with .Values.tmax.resources }}
+          resources:
+          {{- toYaml . | nindent 12 }}
+          {{- end}}
 {{- end }}
