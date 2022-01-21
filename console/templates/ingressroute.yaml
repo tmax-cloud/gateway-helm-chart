@@ -4,8 +4,6 @@ kind: IngressRoute
 metadata:
   name: {{ include "console.fullname" . }}
   namespace: {{ .Release.Namespace }}
-  annotations:
-    helm.sh/hook: "post-install,post-upgrade"
 spec:
   entryPoints:
     - websecure
