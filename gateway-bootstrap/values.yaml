@@ -15,7 +15,7 @@ global:
     clientid: hypercloud5
   console:
     mcMode: true
-    domain: tmaxcloud.local.test
+    domain: tmaxcloud.local
   gateway:
     prod: true
 
