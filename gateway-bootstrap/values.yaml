@@ -16,8 +16,6 @@ global:
   console:
     mcMode: true
     domain: tmaxcloud.local
-  gateway:
-    prod: true
 
 modules:
 
@@ -27,7 +25,6 @@ modules:
       path: cert-manager
       helm:
         valueFiles: cert-manager-values.yaml
-#        parameters: []
     job:
 #      imagePullSecrets: []
       imagePullSecrets:
@@ -39,7 +36,6 @@ modules:
       path: gateway
       helm:
         valueFiles: gateway-values.yaml
-#        parameters: []
     job:
 #      imagePullSecrets: []
       imagePullSecrets:
@@ -51,12 +47,6 @@ modules:
       path: jwt-decode-auth
       helm:
         valueFiles: jwt-decode-auth-values.yaml
-#        parameters: []
-#        parameters:
-#          - name: hyperauth.address
-#            value: hyperauth.tmaxcloud.org
-#          - name: hyperauth.realm
-#            value: tmax
     job:
 #      imagePullSecrets: []
       imagePullSecrets:
@@ -68,18 +58,6 @@ modules:
       path: console
       helm:
         valueFiles: console-values.yaml
-##        parameters: []
-#        parameters:
-#          - name: console.auth.hyperauth
-#            value: hyperauth.tmaxcloud.org
-#          - name: console.auth.realm
-#            value: tmax
-#          - name: console.auth.clientid
-#            value: hypercloud5
-#          - name: console.mcMode
-#            value: true
-#          - name: ingressroute.domain.name
-#            value: tmaxcloud.org
     job:
 #      imagePullSecrets: []
       imagePullSecrets:
