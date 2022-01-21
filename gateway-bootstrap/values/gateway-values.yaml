@@ -9,7 +9,7 @@ traefik:
   fullnameOverride: "gateway"
   additionalArguments:
     # Only use dev environment
-#    - "--serverstransport.insecureskipverify=true"
+    - "--serverstransport.insecureskipverify=true"
     - "--serverstransport.rootcas=/run/secrets/tmaxcloud/ca.crt, /run/secrets/kubernetes.io/serviceaccount/ca.crt"
     - "--entrypoints.websecure.http.middlewares=cors-header@file"
   image:
@@ -45,8 +45,6 @@ traefik:
 #      nodePort: 31433
 #    traefik:
 #      nodePort: 31900
-
-
   resources: {}
   nodeSelector:
     node-role.kubernetes.io/master: ""
