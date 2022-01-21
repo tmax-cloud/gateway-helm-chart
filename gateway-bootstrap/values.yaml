@@ -10,7 +10,7 @@ global:
     is_offline: false
     private_registry: 172.22.6.2:5000
   hyperauth:
-    address: hyperauth.tmaxcloud.org.test
+    address: hyperauth.tmaxcloud.org
     realm: tmax
     clientid: hypercloud5
   console:
