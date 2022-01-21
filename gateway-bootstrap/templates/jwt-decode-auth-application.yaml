@@ -1,3 +1,4 @@
+{{- if .Values.modules.jwtDecodeAuth.enabled }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -6,19 +7,29 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
   annotations:
-    argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   destination:
     namespace: api-gateway-system
     server: {{ .Values.spec.destination.server }}
   source:
-    path: jwt-decode-auth
+    path: {{ .Values.modules.jwtDecodeAuth.source.path }}
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
+    helm:
+      valueFiles:
+        - {{ .Values.modules.jwtDecodeAuth.source.helm.valueFiles }}
+      parameters:
+        - name: hyperauth.address
+          value: {{ .Values.global.hyperauth.address | default "hyperauth.org"}}
+        - name: hyperauth.realm
+          value: {{ .Values.global.hyperauth.realm | default "tmax" }}
+        {{- if .Values.global.registiry.is_offline }}
+        - name: image.repository
+          value: {{ .Values.global.registiry.private_registry }}/docker.io/tmaxcloudck/jwt-decode
+        {{- end }}
   project: default
   syncPolicy:
-    automated:
-      allowEmpty: true
     retry:
       limit: 3
 ---
@@ -32,7 +43,7 @@ metadata:
     app.kubernetes.io/instance: "jwt-decode-auth-sync-wave"
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
   annotations:
-    argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/sync-wave: "2"
     argocd.argoproj.io/hook-delete-policy: HookSucceeded, BeforeHookCreation
 spec:
   template:
@@ -42,11 +53,14 @@ spec:
         app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
         app.kubernetes.io/instance: "jwt-decode-auth-sync-wave"
     spec:
+      {{- with .Values.modules.jwtDecodeAuth.job.imagePullSecrets }}
       imagePullSecrets:
-        - name: regcred
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
       restartPolicy: Never
       containers:
         - name: post-install-job
           image: "alpine:3.3"
           command: ["/bin/sleep","30"]
           imagePullPolicy: IfNotPresent
+{{- end }}

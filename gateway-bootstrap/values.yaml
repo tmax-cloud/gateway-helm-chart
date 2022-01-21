@@ -3,4 +3,85 @@ spec:
     server: https://kubernetes.default.svc
   source:
     repoURL: https://github.com/tmax-cloud/gateway-helm-chart
-    targetRevision: HEAD
+    targetRevision: master
+
+global:
+  registiry:
+    is_offline: true
+    private_registry: 172.22.6.2:5000
+  hyperauth:
+    address: hyperauth.tmaxcloud.org
+    realm: tmax
+    clientid: hypercloud5
+  console:
+    mcMode: true
+    domain: tmaxcloud.org
+  gateway:
+    prod: true
+
+modules:
+
+  certManager:
+    enabled: false
+    source:
+      path: manifest/api-gateway/cert-manager
+      helm:
+        valueFiles: manifest/gateway-bootstrap/values/cert-manager-values.yaml
+        parameters: []
+    job:
+      imagePullSecrets: []
+#      imagePullSecrets:
+#        - name: regcred
+
+  gateway:
+    enalbed: true
+    source:
+      path: manifest/api-gateway/gateway
+      helm:
+        valueFiles: manifest/gateway-bootstrap/values/gateway-values.yaml
+#        parameters: []
+    job:
+      imagePullSecrets: []
+#      imagePullSecrets:
+#        - name: regcred
+
+  jwtDecodeAuth:
+    enabled: true
+    source:
+      path: manifest/api-gateway/jwt-decode-auth
+      helm:
+        valueFiles: manifest/gateway-bootstrap/values/jwt-decode-auth-values.yaml
+#        parameters: []
+        parameters:
+          - name: hyperauth.address
+            value: hyperauth.tmaxcloud.org
+          - name: hyperauth.realm
+            value: tmax
+    job:
+      imagePullSecrets: []
+#      imagePullSecrets:
+#        - name: regcred
+
+  console:
+    enabled: true
+    source:
+      path: manifest/api-gateway/console
+      helm:
+        valueFiles: manifest/gateway-bootstrap/values/console-values.yaml
+#        parameters: []
+        parameters:
+          - name: console.auth.hyperauth
+            value: hyperauth.tmaxcloud.org
+          - name: console.auth.realm
+            value: tmax
+          - name: console.auth.clientid
+            value: hypercloud5
+          - name: console.mcMode
+            value: true
+          - name: ingressroute.domain.name
+            value: tmaxcloud.org
+    job:
+      imagePullSecrets: []
+#      imagePullSecrets:
+#        - name: regcred
+

@@ -1,3 +1,4 @@
+{{- if .Values.modules.certManager.enabled }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -12,15 +13,16 @@ spec:
     namespace: cert-manager
     server: {{ .Values.spec.destination.server }}
   source:
-    path: cert-manager
+    path: {{ .Values.modules.certManager.source.path }}
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
+    helm:
+      valueFiles:
+        - {{ .Values.modules.certManager.source.helm.valueFiles }}
   project: default
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
-    automated:
-      allowEmpty: true
     retry:
       limit: 3
 
@@ -45,11 +47,14 @@ spec:
         app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
         app.kubernetes.io/instance: "cert-manager-sync-wave"
     spec:
+      {{- with .Values.modules.certManager.job.imagePullSecrets }}
       imagePullSecrets:
-        - name: regcred
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
       restartPolicy: Never
       containers:
         - name: post-install-job
           image: "alpine:3.3"
           command: ["/bin/sleep","300"]
           imagePullPolicy: IfNotPresent
+{{- end }}
