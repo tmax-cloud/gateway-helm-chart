@@ -7,15 +7,15 @@ spec:
 
 global:
   registiry:
-    is_offline: false
+    is_offline: true
     private_registry: 172.22.6.2:5000
   hyperauth:
-    address: hyperauth.tmaxcloud.org
+    address: hyperauth.tmaxcloud.org.test
     realm: tmax
     clientid: hypercloud5
   console:
     mcMode: true
-    domain: tmaxcloud.local
+    domain: tmaxcloud.local.test
   gateway:
     prod: true
 
@@ -26,8 +26,8 @@ modules:
     source:
       path: cert-manager
       helm:
-        valueFiles: gateway-bootstrap/values/cert-manager-values.yaml
-        parameters: []
+        valueFiles: cert-manager-values.yaml
+#        parameters: []
     job:
 #      imagePullSecrets: []
       imagePullSecrets:
@@ -38,7 +38,7 @@ modules:
     source:
       path: gateway
       helm:
-        valueFiles: gateway-bootstrap/values/gateway-values.yaml
+        valueFiles: gateway-values.yaml
 #        parameters: []
     job:
 #      imagePullSecrets: []
@@ -50,13 +50,13 @@ modules:
     source:
       path: jwt-decode-auth
       helm:
-        valueFiles: gateway-bootstrap/values/jwt-decode-auth-values.yaml
+        valueFiles: jwt-decode-auth-values.yaml
 #        parameters: []
-        parameters:
-          - name: hyperauth.address
-            value: hyperauth.tmaxcloud.org
-          - name: hyperauth.realm
-            value: tmax
+#        parameters:
+#          - name: hyperauth.address
+#            value: hyperauth.tmaxcloud.org
+#          - name: hyperauth.realm
+#            value: tmax
     job:
 #      imagePullSecrets: []
       imagePullSecrets:
@@ -67,7 +67,7 @@ modules:
     source:
       path: console
       helm:
-        valueFiles: gateway-bootstrap/values/console-values.yaml
+        valueFiles: console-values.yaml
 ##        parameters: []
 #        parameters:
 #          - name: console.auth.hyperauth
