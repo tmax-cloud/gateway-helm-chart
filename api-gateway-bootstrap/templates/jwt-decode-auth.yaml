@@ -30,8 +30,12 @@ spec:
         {{- end }}
   project: default
   syncPolicy:
+    automated:
+      prune: true
     retry:
       limit: 3
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
 ---
 apiVersion: batch/v1
 kind: Job
@@ -60,7 +64,11 @@ spec:
       restartPolicy: Never
       containers:
         - name: post-install-job
+          {{- if .Values.global.registiry.is_offline }}
+          image: "{{ .Values.global.registiry.private_registry }}/docker.io/library/alpine:3.3"
+          {{- else }}
           image: "alpine:3.3"
+          {{- end }}
           command: ["/bin/sleep","30"]
           imagePullPolicy: IfNotPresent
 {{- end }}

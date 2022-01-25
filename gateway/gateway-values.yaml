@@ -9,7 +9,7 @@ traefik:
   fullnameOverride: "gateway"
   additionalArguments:
     # Only use dev environment
-    - "--serverstransport.insecureskipverify=true"
+#    - "--serverstransport.insecureskipverify=true"
     - "--serverstransport.rootcas=/run/secrets/tmaxcloud/ca.crt, /run/secrets/kubernetes.io/serviceaccount/ca.crt"
     - "--entrypoints.websecure.http.middlewares=cors-header@file"
   image:
@@ -53,19 +53,17 @@ traefik:
       operator: Exists
 
 tls:
+  domain: tmaxcloud.test
   acme:
     enabled: false
-    email: yjs890403@gmail.com
+    email: email
     dns:
       type: route53
-      accessKeyID: AKIA5D7L5Q3I7VQCJETF
-      accessKeySecret: 19G1ETeGgjwW6+LDEFDFDVDVDFFDVD
-    domains:
-      - tmaxcloud.org
-    environment: staging
+      accessKeyID: accesskey
+      accessKeySecret: secretkey
+      hostedZoneID: Z07854445SLZAKEQ0V9P
+    environment: production
+  #    domain: tmaxcloud.test
   selfsigned:
-    createTLS: true
-    useDefaultTLS: true
-    commonName: tmaxcloud.local
-    domains:
-      - tmaxcloud.local
+    enabled: true
+#    domain: tmaxcloud.test

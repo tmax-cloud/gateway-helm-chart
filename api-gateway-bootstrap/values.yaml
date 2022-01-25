@@ -15,7 +15,21 @@ global:
     clientid: hypercloud5
   console:
     mcMode: true
-    domain: tmaxcloud.local
+  domain: tmaxcloud.org
+  tls:
+    # acme로 할 경우, domain에 입력한 주소를 가지고 있어야함
+    acme:
+      enabled: true
+      email: test@tmax.co.kr
+      dns:
+        type: route53
+        accessKeyID: accesskey
+        accessKeySecret: secretkey
+        hostedZoneID: Z07854445SLZAKEQ0V9P
+      # staging or production
+      environment: staging
+    selfsigned:
+      enabled: false
 
 modules:
 
@@ -42,7 +56,7 @@ modules:
         - name: regcred
 
   jwtDecodeAuth:
-    enabled: true
+    enabled: false
     source:
       path: jwt-decode-auth
       helm:
@@ -53,7 +67,7 @@ modules:
         - name: regcred
 
   console:
-    enabled: true
+    enabled: false
     source:
       path: console
       helm:

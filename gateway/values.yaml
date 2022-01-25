@@ -45,7 +45,6 @@ traefik:
 #    traefik:
 #      nodePort: 31900
 
-
   resources: {}
   nodeSelector:
     node-role.kubernetes.io/master: ""
@@ -54,19 +53,16 @@ traefik:
       operator: Exists
 
 tls:
+  domain: tmaxcloud.test
   acme:
     enabled: false
-    email: yjs890403@gmail.com
+    email: email
     dns:
       type: route53
-      accessKeyID: AKIA5D7L5Q3I7VQCJETF
-      accessKeySecret: 19G1ETeGgjwW6+LDEFDFDVDVDFFDVD
-    domains:
-      - tmaxcloud.org
+      accessKeyID: accesskey
+      accessKeySecret: secretkey
+      hostedZoneID: Z07854445SLZAKEQ0V9P
     environment: staging
   selfsigned:
-    createTLS: true
-    useDefaultTLS: true
-    commonName: tmaxcloud.local
-    domains:
-      - tmaxcloud.local
+    enabled: true
+
