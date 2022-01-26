@@ -64,12 +64,15 @@ traefik:
   fullnameOverride: "gateway"
   additionalArguments:
     # Only use dev environment
-    - "--serverstransport.insecureskipverify=true"
+    # - "--serverstransport.insecureskipverify=true"
     - "--serverstransport.rootcas=/run/secrets/tmaxcloud/ca.crt, /run/secrets/kubernetes.io/serviceaccount/ca.crt"
     - "--entrypoints.websecure.http.middlewares=cors-header@file"
-#  deployment:
-#    imagePullSecrets:
-#      - name: regcred
+  deployment:
+    podLabels:
+      app: traefik
+    imagePullSecrets: []
+  #    imagePullSecrets:
+  #      - name: regcred
   volumes:
     - name: gateway-config
       mountPath: "/gateway-config"
@@ -77,25 +80,45 @@ traefik:
     - name: selfsigned-ca
       mountPath: "/run/secrets/tmaxcloud"
       type: secret
+  ingressClass:
+    enabled: true
+    isDefaultClass: true
+    fallbackApiVersion: "v1"
+  service:
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-type: nlb
+      service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+  ## When using NodePort service
+  #    type: NodePort
+  #  ports:
+  #    k8s:
+  #      nodePort: 31643
+  #    web:
+  #      nodePort: 31080
+  #    websecure:
+  #      nodePort: 31433
+  #    traefik:
+  #      nodePort: 31900
 
+  resources: {}
+  nodeSelector:
+    node-role.kubernetes.io/master: ""
+  tolerations:
+    - key: "node-role.kubernetes.io/master"
+      operator: Exists
 tls:
-  acme: 
+  domain: tmaxcloud.test
+  acme:
     enabled: false
-    email: tmax@tmax.co.kr
+    email: email
     dns:
       type: route53
-      accessKeyID: <your access key>
-      accessKeySecret: <your secret key>
-    domains:
-#      - sunnycloud.link
-      - tmaxcloud.org
+      accessKeyID: accesskey
+      accessKeySecret: secretkey
+      hostedZoneID: Z07854445SLZAKEQ0V9P
     environment: staging
   selfsigned:
-    createTLS: true
-    useDefaultTLS: true
-    commonName: tmaxcloud.local
-    domains:
-      - tmaxcloud.local
+    enabled: true
 ```
 ```shell
 helm install api-gateway . --namespace api-gateway-system --create-namespace 
