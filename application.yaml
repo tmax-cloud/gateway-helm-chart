@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gateway-bootstrap
+spec:
+  destination:
+    name: ''
+    namespace: argocd
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: api-gateway-bootstrap
+    repoURL: 'https://github.com/tmax-cloud/gateway-helm-chart'
+    targetRevision: master
+    helm:
+      parameters:
+        - name: global.tls.acme.dns.accessKeyID
+          value: AKIA5D7L5Q3I7VQCJ65K
+        - name: global.tls.acme.email
+          value: yjs890403@gmail.com
+        - name: global.domain
+          value: sunnycloud.link
+        - name: global.tls.acme.dns.hostedZoneID
+          value: Z04262982TJ693N8CRF20
+        - name: modules.console.enabled
+          value: 'true'
+        - name: modules.jwtDecodeAuth.enabled
+          value: 'true'
+        - name: modules.certManager.enabled
+          value: 'true'
+        - name: global.console.mcMode
+          value: 'false'
+        - name: global.tls.acme.dns.accessKeySecret
+          value: 19G1ETeGgjwW6+L8gaNNENFbJVQswchg4aCKQT8F
+  syncPolicy:
+    automated:
+      prune: true
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+  project: default
