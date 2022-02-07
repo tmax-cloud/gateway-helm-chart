@@ -12,13 +12,13 @@ cert-manager:
     - "--dns01-recursive-nameservers=8.8.8.8:53"
     - "--dns01-recursive-nameservers-only"
 #  image:
-#    repository: imageName:Tag
+#    repository: imageRepository
 #  cainjector:
 #    image:
-#      repository: imageName:Tag
+#      repository: imageRepository
 #  webhook:
 #    image:
-#      repository: imageName:Tag
+#      repository: imageRepository
 ## 파드에 imagePullSecrets 이 없는 경우, ServiceAccount 의 imagePullSecrets 이 파드에 추가된다
 ## https://kubernetes.io/ko/docs/reference/access-authn-authz/service-accounts-admin/
 #  global:
