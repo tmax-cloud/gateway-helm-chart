@@ -12,6 +12,9 @@ traefik:
 #    - "--serverstransport.insecureskipverify=true"
     - "--serverstransport.rootcas=/run/secrets/tmaxcloud/ca.crt, /run/secrets/kubernetes.io/serviceaccount/ca.crt"
     - "--entrypoints.websecure.http.middlewares=cors-header@file"
+  image:
+    name: traefik
+    tage: "v2.8.1"
   deployment:
     podLabels:
       app: traefik

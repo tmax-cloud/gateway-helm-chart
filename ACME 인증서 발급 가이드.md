@@ -4,7 +4,7 @@
 - 본 가이드는 cert-manager의 ACME 방식 중 DNS01을 이용하여 공인된 TLS 인증서 발급하는 방법에 대해 다룬다.
   - 참고 링크: [DNS01을 통한 인증서 개요](https://cert-manager.io/docs/configuration/acme/dns01/)
 - DNS01방식에서 많은 DNS(Domain Name Service)를 통한 인증서 발급을 제공한다. 본 가이드는 그 중 AWS의 Route53을 통한 TLS 인증서 발급에 대해 다룬다. 
-  - 참고 링크: [Route53을 통한 CLusterIssuer 생성](https://cert-manager.io/docs/configuration/acme/dns01/route53/), 
+  - 참고 링크: [Route53을 통한 CLusterIssuer 생성](https://cert-manager.io/docs/configuration/acme/dns01/route53/),
     [Route53에 대한 기본 설명](https://brunch.co.kr/@topasvga/49) 
 
 #### STEP 0. 외부 CA를 통해 TLS 인증서를 발급받는 방식 & Client-Server간 https 통신 방식에 대한 기본 설명 
@@ -22,7 +22,7 @@
 
 - ClusterIssuer 생성과 letsencrypt를 통한 공인된 TLS 인증서 발급을 위해 아래 yaml 파일을 참고하여 수정하길 권장한다. 
 ```yaml
-apiVersion: certmanager.k8s.io/v1
+apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
   name: letsencrypt-dns
@@ -37,11 +37,12 @@ spec:
     solvers:
       - dns01:
           route53:
+            region: ap-northeast-2
             accessKeyID: KIR2WO5YWT
             secretAccessKeySecretRef:
               name: route53-secret
               key: secret-access-key
-            hostedZoneID: J13B3AB
+            hostedZoneID: J13B3AB # optional
 ```
 
 #### STEP 2. Certificate을 사용하여 TLS secret 생성  
