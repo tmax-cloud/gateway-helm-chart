@@ -13,13 +13,14 @@ global:
     address: hyperauth.tmaxcloud.org
     realm: tmax
     clientid: hypercloud5
+    clientSecret: ""
   console:
     mcMode: true
-  domain: tmaxcloud.org
+  domain: ck1-1.link
   tls:
     # acme로 할 경우, domain에 입력한 주소를 가지고 있어야함
     acme:
-      enabled: true
+      enabled: false
       email: test@tmax.co.kr
       dns:
         type: route53
@@ -40,40 +41,52 @@ modules:
       helm:
         valueFiles: cert-manager-values.yaml
     job:
-#      imagePullSecrets: []
-      imagePullSecrets:
-        - name: regcred
+      imagePullSecrets: []
+#      imagePullSecrets:
+#        - name: regcred
 
   gateway:
-    enalbed: true
+    enalbed: false
     source:
       path: gateway
       helm:
         valueFiles: gateway-values.yaml
     job:
-#      imagePullSecrets: []
-      imagePullSecrets:
-        - name: regcred
+      imagePullSecrets: []
+#      imagePullSecrets:
+#        - name: regcred
 
   jwtDecodeAuth:
-    enabled: false
+    enabled: true
     source:
       path: jwt-decode-auth
       helm:
         valueFiles: jwt-decode-auth-values.yaml
     job:
-#      imagePullSecrets: []
-      imagePullSecrets:
-        - name: regcred
+      imagePullSecrets: []
+#      imagePullSecrets:
+#        - name: regcred
 
   console:
-    enabled: false
+    enabled: true
     source:
       path: console
       helm:
         valueFiles: console-values.yaml
     job:
-#      imagePullSecrets: []
-      imagePullSecrets:
-        - name: regcred
+      imagePullSecrets: []
+#      imagePullSecrets:
+#        - name: regcred
+
+  oauth2Proxy:
+    enabled: true
+    source:
+      path: oauth2-proxy
+      helm:
+        valueFiles: oauth2-proxy-values.yaml
+    fullNameOverride: oauth2-proxy
+    job:
+      imagePullSecrets: []
+#      imagePullSecrets:
+#        - name: regcred
 
