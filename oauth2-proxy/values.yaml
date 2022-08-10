@@ -3,67 +3,40 @@
 # due to the fact that it doesn't query an actual cluster
 kubeVersion:
 
-fullnameOverride: ""
-
 # Oauth client configuration specifics
 config:
   # Add config annotations
   annotations: {}
   # OAuth client ID
-  clientID: "hypercloud5"
+  clientID: "XXXXXXX"
   # OAuth client secret
-  clientSecret: "7119dfca-8bf6-4f7a-a147-52423769547d"
+  clientSecret: "XXXXXXXX"
   # Create a new secret with the following command
   # openssl rand -base64 32 | head -c 32 | base64
   # Use an existing secret for OAuth2 credentials (see secret.yaml for required fields)
   # Example:
   # existingSecret: secret
-  # openssl rand -base64 32 | tr -- '+/' '-_'
-  cookieSecret: "iM9b7w6ZkDDl4Y72oGmwZA2b5-PkFYGcIxfFTq93gSE="
+  cookieSecret: "XXXXXXXXXXXXXXXX"
   # The name of the cookie that oauth2-proxy will create
   # If left empty, it will default to the release name
-  cookieName: "tmaxcloud"
+  cookieName: ""
   google: {}
     # adminEmail: xxxx
     # serviceAccountJson: xxxx
     # Alternatively, use an existing secret (see google-secret.yaml for required fields)
-  # Example:
-  # existingSecret: google-secret
+    # Example:
+    # existingSecret: google-secret
   # Default configuration, to be overridden
-  redirectUrl: "https://oauth2-helm-oauth2-proxy.tmaxcloud.org/oauth2/callback"
-  # hyperauth: {}
-  hyperauth:
-    address: hyperauth.tmaxcloud.org
-    realm: tmax
-#  configFile:
-#  configFile: |-
-#    email_domains=[ "*" ]
-#    upstreams=[ "static://202" ]
-#    reverse_proxy=true
-#    provider="keycloak-oidc"
-#    oidc_issuer_url="https://hyperauth.tmaxcloud.org/auth/realms/tmax"
-#    cookie_secure=true
-#    redirect_url="https://oauth2-helm.tmaxcloud.org/oauth2/callback"
-#    skip_provider_button=true
-#    set_xauthrequest=true
-#    set_authorization_header=true
-#    pass_authorization_header=true
-#    pass_access_token=true
-#    scope=["openid" "profile" "email" "groups"]
-extraArgs:
-  email-domain: "*"
-  upstream: "static://202"
-  reverse-proxy: true
-#  provider: "keycloak-oidc"
-#  oidc-issuer-url: "https://hyperauth.tmaxcloud.org/auth/realms/tmax"
-  cookie-secure: true
-  skip-provider-button: true
-  set-authorization-header: true
-#  set-xauthrequest: true
-#  pass-authorization-header: true
-#  pass-access-token: true
-  scope: "openid profile email groups"
-extraEnv: []
+  configFile: |-
+    email_domains = [ "*" ]
+    upstreams = [ "file:///dev/null" ]
+  # Custom configuration file: oauth2_proxy.cfg
+  # configFile: |-
+  #   pass_basic_auth = false
+  #   pass_access_token = true
+  # Use an existing config map (see configmap.yaml for required fields)
+  # Example:
+  # existingConfig: config
 
 alphaConfig:
   enabled: false
@@ -76,18 +49,21 @@ alphaConfig:
   # Arbitrary configuration data to append
   configData: {}
   # Use an existing config map (see configmap-alpha.yaml for required fields)
-#  existingConfig: {}
+  existingConfig: ~
 
 image:
-  repository: "docker.io/tmaxcloudck/oauth2-proxy"
+  repository: "quay.io/oauth2-proxy/oauth2-proxy"
   tag: "v7.3.0"
   pullPolicy: "IfNotPresent"
 
-  # Optionally specify an array of imagePullSecrets.
-  # Secrets must be manually created in the namespace.
-  # ref: https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
-  # imagePullSecrets:
+# Optionally specify an array of imagePullSecrets.
+# Secrets must be manually created in the namespace.
+# ref: https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
+# imagePullSecrets:
   # - name: myRegistryKeySecretName
+
+extraArgs: {}
+extraEnv: []
 
 # -- Custom labels to add into metadata
 customLabels: {}
@@ -143,34 +119,48 @@ ingressroute:
 
 ingress:
   enabled: false
-  #className: tmax-cloud
+  # className: nginx
   path: /
+  # Only used if API capabilities (networking.k8s.io/v1) allow it
   pathType: ImplementationSpecific
-  #hosts:
-  #  - oauth2-proxy.ck1-1.link
-  #annotations:
-  #  traefik.ingress.kubernetes.io/router.entrypoints: websecure
-  #tls:
-  #  - hosts:
-  #      - oauth2-proxy.ck1-1.link
-
+  # Used to create an Ingress record.
+  # hosts:
+    # - chart-example.local
+  # Extra paths to prepend to every host configuration. This is useful when working with annotation based services.
+  # Warning! The configuration is dependant on your current k8s API version capabilities (networking.k8s.io/v1)
+  # extraPaths:
+  # - path: /*
+  #   pathType: ImplementationSpecific
+  #   backend:
+  #     service:
+  #       name: ssl-redirect
+  #       port:
+  #         name: use-annotation
+  # annotations:
+  #   kubernetes.io/ingress.class: nginx
+  #   kubernetes.io/tls-acme: "true"
+  # tls:
+    # Secrets must be manually created in the namespace.
+    # - secretName: chart-example-tls
+    #   hosts:
+    #     - chart-example.local
 
 resources: {}
   # limits:
   #   cpu: 100m
   #   memory: 300Mi
   # requests:
-#   cpu: 100m
-#   memory: 300Mi
+  #   cpu: 100m
+  #   memory: 300Mi
 
 extraVolumes: []
   # - name: ca-bundle-cert
-#   secret:
-#     secretName: <secret-name>
+  #   secret:
+  #     secretName: <secret-name>
 
 extraVolumeMounts: []
-# - mountPath: /etc/ssl/certs/
-#   name: ca-bundle-cert
+  # - mountPath: /etc/ssl/certs/
+  #   name: ca-bundle-cert
 
 priorityClassName: ""
 
@@ -273,14 +263,6 @@ sessionStorage:
 redis:
   # provision an instance of the redis sub-chart
   enabled: false
-  #replica:
-  #  replicaCount: 1
-  #  persistence:
-  #    size: 100Mi
-  #master:
-  #  persistence:
-  #    size: 100Mi
-
   # Redis specific helm chart settings, please see:
   # https://github.com/bitnami/charts/tree/master/bitnami/redis#parameters
   # redisPort: 6379
@@ -337,5 +319,5 @@ extraObjects: []
   #           objectName: client-secret
   #         - key: cookie-secret
   #         objectName: cookie-secret
-#       secretName: oauth2-proxy-secrets-store
-#       type: Opaque
+  #       secretName: oauth2-proxy-secrets-store
+  #       type: Opaque

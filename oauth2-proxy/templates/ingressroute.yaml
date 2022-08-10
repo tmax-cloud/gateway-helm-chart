@@ -1,0 +1,58 @@
+{{- if .Values.ingressroute.enabled -}}
+{{- $serviceName := include "oauth2-proxy.fullname" . -}}
+{{- $servicePort := .Values.service.portNumber -}}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  labels:
+    app: {{ template "oauth2-proxy.name" . }}
+{{- include "oauth2-proxy.labels" . | indent 4 }}
+  name: {{ template "oauth2-proxy.fullname" . }}
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`{{ include "oauth2-proxy.fullname" . }}.{{.Values.ingressroute.host }}`) && PathPrefix(`/`)
+      middlewares:
+        - name: {{.Release.Namespace}}-{{ include "oauth2-proxy.fullname" . }}-headers@kubernetescrd
+      services:
+        - name: {{ template "oauth2-proxy.fullname" . }}
+          namespace: {{ .Release.Namespace }}
+          port: {{ $servicePort }}
+  tls: {}
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  labels:
+    app: {{ template "oauth2-proxy.name" . }}
+{{- include "oauth2-proxy.labels" . | indent 4 }}
+  name: {{ template "oauth2-proxy.fullname" . }}-headers
+spec:
+  headers:
+     browserXssFilter: true
+     contentTypeNosniff: true
+     forceSTSHeader: true
+     frameDeny: true
+     stsIncludeSubdomains: true
+     stsPreload: true
+     stsSeconds: 315360000
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  labels:
+    app: {{ template "oauth2-proxy.name" . }}
+{{- include "oauth2-proxy.labels" . | indent 4 }}
+  name: {{ template "oauth2-proxy.fullname" . }}-forwardauth
+spec:
+  forwardAuth:
+    address: https://{{ include "oauth2-proxy.fullname" . }}.{{.Values.ingressroute.host }}/
+    trustForwardHeader: true
+    authResponseHeaders:
+      - X-Auth-Request-Access-Token
+      - Authorization
+{{- end -}}
