@@ -13,7 +13,7 @@ global:
     address: hyperauth.tmaxcloud.org
     realm: tmax
     clientid: hypercloud5
-    clientSecret: ""
+    clientSecret: "7119dfca-8bf6-4f7a-a147-52423769547d"
   console:
     mcMode: true
   domain: ck1-1.link
