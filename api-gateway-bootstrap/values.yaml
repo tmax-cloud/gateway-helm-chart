@@ -33,6 +33,9 @@ global:
       enabled: false
 
 modules:
+  namespace:
+    source:
+      path: namespace
 
   certManager:
     enabled: false
